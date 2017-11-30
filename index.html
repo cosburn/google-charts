@@ -1,0 +1,103 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+      google.charts.load('current', {'packages':['corechart']});
+
+      google.charts.setOnLoadCallback(initialize);
+
+      function initialize() {
+        var opts = {sendMethod: 'auto'};
+        var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1r0or7V8wvwlU4CM8mYi9UqSpBTi4Axug2ruzh5bgfVQ/edit?usp=sharing', opts);
+
+        query.setQuery('select B, C');
+
+        query.send(handleQueryResponse);
+      }
+
+      function handleQueryResponse(response) {
+
+        if (response.isError()) {
+          alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+          return;
+        }
+
+        var data = response.getDataTable();
+
+        var view = new google.visualization.DataView(data);
+
+        view.setColumns([0, 1, {
+          type: "string",
+          role: "style",
+          calc: function (dataTable, rowIndex) {
+            if (rowIndex < 5) {
+              //Arts & Culture
+              return 'color: #004578;';
+            } else if (rowIndex < 9) {
+              //Civic Engagement
+              return 'color: #f2f760;';
+            } else if (rowIndex < 15) {
+              //Community Safety
+              return 'color: #7cd468;';
+            } else if (rowIndex < 20) {
+              //Downtown Development
+              return 'color: #3166b8;';
+            } else if (rowIndex < 26) {
+              //Economic Competitiveness
+              return 'color: #9b2e87;';
+            } else if (rowIndex < 32) {
+              //Education
+              return 'color: #a5e2ca;';
+            } else if (rowIndex < 40) {
+              //Environmental Sustainability
+              return 'color: #00b16e;';
+            } else if (rowIndex < 44) {
+              //Family Well-Being
+              return 'color: #ef3f7e;';
+            } else if (rowIndex < 50) {
+              //Health & Fitness
+              return 'color: #a59dd1;';
+            } else if (rowIndex < 55) {
+              //Neighborhoods
+              return 'color: #00c7c6;';
+            } else {
+              //Transportation
+              return 'color: #f1d398;';
+            }
+          }
+        }]);
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(view, {
+          title: "Progress Toward SA2020 Goals",
+          chartArea: {
+            width: '905%',
+            height: '100%'
+          },
+          height:600,
+          fontSize:12,
+          bar: {
+            groupWidth:'95%'
+          },
+          animation: {
+            duration:800,
+            startup:true,
+            easing: 'out'
+          },
+          legend: {
+            position: 'none'
+          },
+          axisTitlesPosition: 'none'
+        });
+      }
+    </script>
+  </head>
+
+  <body>
+    <!--Div that will hold the pie chart-->
+    <h1>Progress Toward SA2020 Goals</h1>
+    <h2>Based on latest data per indicator</h2>
+    <div id="chart_div"></div>
+  </body>
+</html>
